@@ -38,3 +38,6 @@ test*
 # Lab 2
 WordLadder*
 RandomWriter*
+
+# Homework 7
+RedundantParentheses
