@@ -38,18 +38,17 @@ function compare() {
 }
 
 score=0
-for ((m = 1; m < 10; m++)); do
-	file=traces/trace0$m
-	line=$(gtimeout 100 ./WordLadder <$file >&1 | head -1)
+for trace in $(ls traces); do
+	line=$(gtimeout 100 ./WordLadder <traces/$trace >&1 | head -1)
 	if [[ $(echo "$line" | grep "ladder") == "" ]]; then
-		echo -e "Trace0$m......\033[31mFailed\033[0m"
+		echo -e "$trace......\033[31mFailed\033[0m"
 		continue
 	fi
-	ans=$(tail -1 $file)
+	ans=$(tail -1 traces/$trace)
 
 	if [[ $(echo "$ans" | grep "no ladder exists") != "" ]]; then
 		if [ "$ans" != "no ladder exists" ]; then
-			echo -e "Trace0$m......\033[31mFailed\033[0m"
+			echo -e "$trace......\033[31mFailed\033[0m"
 			continue
 		fi
 	else
@@ -61,18 +60,18 @@ for ((m = 1; m < 10; m++)); do
 					if compare ${array[index]} ${array[index + 1]}; then
 						:
 					else
-						echo -e "Trace0$m......\033[31mFailed\033[0m"
+						echo -e "$trace......\033[31mFailed\033[0m"
 						continue 2
 					fi
 				fi
 			done
 		else
-			echo -e "Trace0$m......\033[31mFailed\033[0m"
+			echo -e "$trace......\033[31mFailed\033[0m"
 			continue
 		fi
 	fi
 
-	echo -e "Trace0$m......\033[32mPassed\033[0m"
+	echo -e "$trace......\033[32mPassed\033[0m"
 	score=$(($score + 5))
 done
 
