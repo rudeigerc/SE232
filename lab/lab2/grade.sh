@@ -27,7 +27,7 @@ function compare() {
 				count=$(($count + 1))
 			fi
 		done
-		if [ $count -gt 1 ]; then
+		if [ $count -ne 1 ]; then
 			return 1
 		else
 			return 0
@@ -40,7 +40,7 @@ function compare() {
 score=0
 for ((m = 1; m < 10; m++)); do
 	file=traces/trace0$m
-	line=$(gtimeout 20 ./WordLadder <$file >&1 | head -1)
+	line=$(gtimeout 100 ./WordLadder <$file >&1 | head -1)
 	if [[ $(echo "$line" | grep "ladder") == "" ]]; then
 		echo -e "Trace0$m......\033[31mFailed\033[0m"
 		continue
