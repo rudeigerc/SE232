@@ -1,7 +1,7 @@
 #include <iostream>
+#include <map>
 #include <set>
 #include <stack>
-#include <map>
 
 std::map<char, int> priority = {{'+', 1}, {'-', 1}, {'*', 2}, {'/', 2}};
 std::set<char> operators = {'+', '-', '*', '/'};
@@ -14,8 +14,8 @@ bool prior(char lhs, char rhs)
     return priority[lhs] >= priority[rhs];
 }
 
-// change the format of the expression from index to reverse polish
-void infix(std::string IN_expression)
+// Shunting-yard algorithm
+void shunting_yard(std::string IN_expression)
 {
     std::stack<char> st;
     for (char ch : IN_expression)
@@ -188,9 +188,13 @@ int main()
     std::string expression;
     std::cin >> expression;
 
-    infix(expression);
+    shunting_yard(expression);
+
+    // Method 1: Binary expression tree
     Node *expresssion_tree = expression_tree(RPN_expression);
     traversal(expresssion_tree, 0);
+
+    // Method 2: Pure stack
     // reverse_polish(RPN_expression);
 
     std::cout << result << std::endl;
