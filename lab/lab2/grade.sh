@@ -39,7 +39,7 @@ function compare() {
 
 score=0
 for trace in $(ls traces); do
-	line=$(gtimeout 100 ./WordLadder <traces/$trace >&1 | head -1)
+	line=$(gtimeout 100 ./WordLadder <traces/$trace | head -1)
 	if [[ $(echo "$line" | grep "ladder") == "" ]]; then
 		echo -e "$trace......\033[31mFailed\033[0m"
 		continue

@@ -1,18 +1,20 @@
 #include <iostream>
+#include <set>
 #include <stack>
 #include <map>
-#include <set>
 
-std::map<char, int> priority;
+std::map<char, int> priority = {{'+', 1}, {'-', 1}, {'*', 2}, {'/', 2}};
+std::set<char> operators = {'+', '-', '*', '/'};
+
 std::string RPN_expression;
 std::string result;
-std::set<char> operators = {'+', '-', '*', '/'};
 
 bool prior(char lhs, char rhs)
 {
     return priority[lhs] >= priority[rhs];
 }
 
+// change the format of the expression from index to reverse polish
 void infix(std::string IN_expression)
 {
     std::stack<char> st;
@@ -57,18 +59,24 @@ void infix(std::string IN_expression)
     }
 }
 
+struct Element
+{
+    std::string val;
+    int level;
+};
+
+// recover to infix expression
 void reverse_polish(std::string RPN_expression)
 {
-    std::stack<std::string> st;
-    std::string rhs, lhs;
-    char prev;
+    std::stack<Element> st;
+    Element lhs, rhs;
     for (char ch : RPN_expression)
     {
         switch (ch)
         {
         case 'a' ... 'z':
         case 'A' ... 'Z':
-            st.push(std::string(1, ch));
+            st.push(Element{std::string(1, ch), 0});
             break;
         case '+':
         case '-':
@@ -78,16 +86,16 @@ void reverse_polish(std::string RPN_expression)
             st.pop();
             lhs = st.top();
             st.pop();
-            st.push(lhs + std::string(1, ch) + rhs);
-            prev = ch;
+            st.push(Element{lhs.val + std::string(1, ch) + rhs.val});
             break;
         default:
             break;
         }
     }
-    result = st.top();
+    result = st.top().val;
 }
 
+// node of the expression tree
 struct Node
 {
     char val;
@@ -96,6 +104,7 @@ struct Node
     Node(char ch) : val(ch), left(NULL), right(NULL) {}
 };
 
+// build a expression tree fromn RPN
 Node *expression_tree(std::string RPN_expression)
 {
     std::stack<Node *> st;
@@ -131,28 +140,35 @@ Node *expression_tree(std::string RPN_expression)
     return node;
 }
 
+// infix traversal
 void traversal(Node *tree, int level)
 {
     if (tree)
     {
+        // give the priority level
         int llv, rlv;
         switch (tree->val)
         {
-        case '*':
-            llv = rlv = 4;
-            break;
-        case '/':
-            llv = 4;
-            rlv = 5;
-            break;
         case '+':
-            llv = rlv = 1;
+            llv = 1;
+            rlv = 1;
             break;
         case '-':
             llv = 1;
             rlv = 2;
             break;
+        case '*':
+            llv = 3;
+            rlv = 3;
+            break;
+        case '/':
+            llv = 3;
+            rlv = 4;
+            break;
+        default:
+            break;
         }
+
         if (operators.find(tree->val) != operators.end() && level > llv)
         {
             result.push_back('(');
@@ -172,14 +188,10 @@ int main()
     std::string expression;
     std::cin >> expression;
 
-    priority['+'] = 1;
-    priority['-'] = 1;
-    priority['*'] = 2;
-    priority['/'] = 2;
-
     infix(expression);
     Node *expresssion_tree = expression_tree(RPN_expression);
     traversal(expresssion_tree, 0);
+    // reverse_polish(RPN_expression);
 
     std::cout << result << std::endl;
     return 0;
