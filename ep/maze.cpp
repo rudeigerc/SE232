@@ -1,10 +1,9 @@
-
 #include <iostream>
 #include <string>
 #include <random>
 #include <stack>
 
-#define DENSITY 5
+#define DENSITY 6
 #define RED "\033[41m"
 #define GREEN "\033[42m"
 #define YELLOW "\033[43m"
@@ -65,65 +64,84 @@ bool solve(vector<vector<int>> &maze, Point start, Point end)
 
     if (maze[start.X][start.Y] != 1)
         return false;
+    else
+        maze[start.X][start.Y] = 2;
 
     st.push(start);
 
-    while (!maze.empty())
+    while (!st.empty())
     {
+        if (maze[end.X][end.Y] == 2)
+            return true;
+
         Point p = st.top();
-        st.pop();
-        maze[start.X][start.Y] = 2;
 
         // down
         if (p.X + 1 < maze.size() && maze[p.X + 1][p.Y] == 1)
         {
             st.push(Point(p.X + 1, p.Y));
+            maze[p.X + 1][p.Y] = 2;
+            continue;
         }
 
         // left-down
-        if (p.X + 1 < maze.size() && p.Y - 1 > 0 && maze[p.X + 1][p.Y - 1] == 1)
+        if (p.X + 1 < maze.size() && p.Y - 1 >= 0 && maze[p.X + 1][p.Y - 1] == 1)
         {
             st.push(Point(p.X + 1, p.Y - 1));
+            maze[p.X + 1][p.Y - 1] = 2;
+            continue;
         }
 
         // left
-        if (p.Y - 1 > 0 && maze[p.X][p.Y - 1] == 1)
+        if (p.Y - 1 >= 0 && maze[p.X][p.Y - 1] == 1)
         {
             st.push(Point(p.X, p.Y - 1));
+            maze[p.X][p.Y - 1] = 2;
+            continue;
         }
 
         // left-uo
-        if (p.X - 1 > 0 && p.Y - 1 > 0 && maze[p.X - 1][p.Y - 1] == 1)
+        if (p.X - 1 >= 0 && p.Y - 1 >= 0 && maze[p.X - 1][p.Y - 1] == 1)
         {
             st.push(Point(p.X - 1, p.Y - 1));
+            maze[p.X - 1][p.Y - 1] = 2;
+            continue;
         }
 
         // up
-        if (p.X - 1 > 0 && maze[p.X - 1][p.Y] == 1)
+        if (p.X - 1 >= 0 && maze[p.X - 1][p.Y] == 1)
         {
             st.push(Point(p.X - 1, p.Y));
+            maze[p.X - 1][p.Y] = 2;
+            continue;
         }
 
         // right-up
-        if (p.X - 1 > 0 && p.Y + 1 < maze[0].size() && maze[p.X - 1][p.Y + 1] == 1)
+        if (p.X - 1 >= 0 && p.Y + 1 < maze[0].size() && maze[p.X - 1][p.Y + 1] == 1)
         {
             st.push(Point(p.X - 1, p.Y + 1));
+            maze[p.X - 1][p.Y + 1] = 2;
+            continue;
         }
 
         // right
         if (p.Y + 1 < maze[0].size() && maze[p.X][p.Y + 1] == 1)
         {
             st.push(Point(p.X, p.Y + 1));
+            maze[p.X][p.Y + 1] = 2;
+            continue;
         }
 
         // right-down
         if (p.X + 1 < maze.size() && p.Y + 1 < maze[0].size() && maze[p.X + 1][p.Y + 1] == 1)
         {
             st.push(Point(p.X + 1, p.Y + 1));
+            maze[p.X + 1][p.Y + 1] = 2;
+            continue;
         }
 
-        if (maze[end.X][end.Y] == 2)
-            return true;
+        maze[st.top().X][st.top().Y] = 3;
+        st.pop();
     }
 
     return false;
