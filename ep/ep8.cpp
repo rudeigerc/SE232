@@ -4,9 +4,13 @@
 #include <stack>
 
 #define DENSITY 6
+
 #define RED "\033[41m"
 #define GREEN "\033[42m"
 #define YELLOW "\033[43m"
+#define BLUE "\033[44m"
+#define PURPLE "\033[45m"
+#define AZURE "\033[46m"
 #define WHITE "\033[47m"
 
 using namespace std;
@@ -72,7 +76,11 @@ bool solve(vector<vector<int>> &maze, Point start, Point end)
     while (!st.empty())
     {
         if (maze[end.X][end.Y] == 2)
+        {
+            maze[start.X][start.Y] = 5;
+            maze[end.X][end.Y] = 5;
             return true;
+        }
 
         Point p = st.top();
 
@@ -176,19 +184,28 @@ void print(vector<vector<int>> maze)
             switch (maze[i][j])
             {
             case 0:
-                cout << GREEN << "  "
-                     << "\033[0m";
-                break;
-            case 1:
+                // wall
                 cout << YELLOW << "  "
                      << "\033[0m";
                 break;
+            case 1:
+                // road
+                cout << GREEN << "  "
+                     << "\033[0m";
+                break;
             case 2:
+                // route
                 cout << RED << "  "
                      << "\033[0m";
                 break;
             case 3:
+                // wrong
                 cout << WHITE << "  "
+                     << "\033[0m";
+                break;
+            case 5:
+                // start and end
+                cout << PURPLE << "  "
                      << "\033[0m";
                 break;
             }
@@ -224,10 +241,9 @@ int main()
     cout << "Please input the end point:";
     cin >> end.X >> end.Y;
 
-    if (solve(maze, start, end))
-        print(maze);
-    else
+    if (!solve(maze, start, end))
         cout << "No answer." << endl;
+    print(maze);
 
     return 0;
 }
