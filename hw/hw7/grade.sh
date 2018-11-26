@@ -6,6 +6,7 @@ if [ -f RedundantParentheses.cpp ]; then
 	clang++ RedundantParentheses.cpp --std=c++11 -O2 -o RedundantParentheses
 else
 	echo "RedundantParentheses.cpp not found"
+	exit 1
 fi
 
 score=0
