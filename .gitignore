@@ -34,6 +34,7 @@
 .vscode
 
 test*
+*.xlsx
 
 # Lab 2
 WordLadder*

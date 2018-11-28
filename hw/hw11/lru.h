@@ -31,7 +31,7 @@ class LRUCache
 
             node->prev = head;
             node->next = head->next;
-            head->next = node;
+            node->prev->next = node;
             node->next->prev = node;
 
             return node->value;
