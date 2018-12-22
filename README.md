@@ -9,8 +9,8 @@ Some materials as TA of **SE232: Programming and Data Structures**, including gr
   - Homework 2: Prime Distance
   - Homework 7: Redundant Parentheses
   - Homework 11: LRU and LFU Cache
+  - Homework 15: Trie
 - Labs
   - Lab 2: Fun with Collections
     - Part A: Word Ladder
     - Part B: Random Writer
-- ...
